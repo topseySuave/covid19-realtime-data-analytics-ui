@@ -1,1 +1,1 @@
-# covid19-realtime-data-visualizer-ui
+# Covid-19 Realtime Data Visualizer UI

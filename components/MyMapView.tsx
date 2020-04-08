@@ -4,22 +4,40 @@ import mapboxgl from 'mapbox-gl'
 const MyMapView = (props) => {
 
     mapboxgl.accessToken = process.env.MAP_BOX_TOKEN;
-    let mapContainer, markerPointer;
+    let mapContainer, markerPointer, map;
 
     const [state, setState] = useState({
         lng: 5,
         lat: 34,
         zoom: 2,
         mapStyle: 'mapbox://styles/mapbox/dark-v10'
+        // mapStyle: 'mapbox://styles/mapbox/light-v10'
     })
 
     useEffect(() => {
-        const map = new mapboxgl.Map({
+        map = new mapboxgl.Map({
             container: mapContainer,
             style: state.mapStyle,
             center: [state.lng, state.lat],
             zoom: state.zoom
         });
+
+        // Add geolocate control to the map.
+        map.addControl(
+            new mapboxgl.GeolocateControl({
+                positionOptions: {
+                    enableHighAccuracy: true
+                },
+                trackUserLocation: true
+            })
+        );
+
+        map.on('load', () => {
+            new mapboxgl.Marker(markerPointer)
+                .setLngLat([state.lng, state.lat])
+                .addTo(map);
+        })
+
         map.on('move', () => {
             setState({
                 ...state,
@@ -28,28 +46,18 @@ const MyMapView = (props) => {
                 zoom: map.getZoom().toFixed(2),
             })
         })
-
-        new mapboxgl.Marker(markerPointer)
-            .setLngLat([state.lng, state.lat])
-            .addTo(map);
-
     }, [])
 
     console.log(' return ===> ', props);
 
     const changeToDark = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        if (state.mapStyle === 'mapbox://styles/mapbox/dark-v10') return;
-        return setState({
-            ...state,
-            mapStyle: 'mapbox://styles/mapbox/dark-v10'
-        })
+        e.preventDefault()
+        return map.setStyle('mapbox://styles/mapbox/dark-v10')
     }
 
     const changeToStreet = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        setState({
-            ...state,
-            mapStyle: 'mapbox://styles/mapbox/streets-v11'
-        })
+        e.preventDefault()
+        return map.setStyle('mapbox://styles/mapbox/streets-v11')
     }
 
     console.log(state);

@@ -1,5 +1,5 @@
 // import App from 'next/app'
-import './style.css'
+import './output.css'
 import Home from './'
 
 function MyApp({ Component, pageProps }) {

@@ -1,8 +1,9 @@
 {
   "scripts": {
-    "dev": "next",
+    "dev": "yarn build:css && next",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "build:css": "npx tailwindcss build ./pages/styles.css -o ./pages/output.css"
   },
   "dependencies": {
     "@types/node": "^13.11.0",

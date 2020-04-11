@@ -3,7 +3,7 @@
     "dev": "yarn build:css && next",
     "build": "next build",
     "start": "next start",
-    "build:css": "npx tailwindcss build ./pages/styles.css -o ./pages/output.css"
+    "build:css": "tailwindcss build ./pages/style.css -o ./pages/output.css"
   },
   "dependencies": {
     "@types/node": "^13.11.0",

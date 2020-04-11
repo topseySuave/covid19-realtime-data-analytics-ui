@@ -1,10 +1,8 @@
+@import "../node_modules/mapbox-gl/dist/mapbox-gl.css";
 @import "tailwindcss/base";
-
 @import "tailwindcss/components";
-
 @import "tailwindcss/utilities";
-
-@import '../node_modules/mapbox-gl/dist/mapbox-gl.css';
+@import "tailwindcss/screens";
 
 .sidebarStyle {
     display: inline-block;

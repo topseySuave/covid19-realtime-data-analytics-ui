@@ -13,21 +13,20 @@ type Datasets = {
 interface Data {
     stats?: Props[];
     type?: 'graph' | 'infoStat';
+    title?: string;
     graphData?: {
         labels: Array<String>;
         datasets: Array<Datasets>;
     }
 }
 
-export const Card: React.FC<Data> = ({ stats, type, graphData }) => {
+export const Card: React.FC<Data> = ({ stats, title, type, graphData }) => {
     if (type && type === 'graph') {
         return (
             <div className="w-full rounded-lg overflow-hidden shadow-lg bg-gray-800 mb-2">
                 <div className="px-2 py-2">
                     <Line data={graphData} height={250} />
-                    <p className="text-gray-500 text-base">
-                        Drop Rate
-                    </p>
+        <p className="text-gray-500 text-base">{title}</p>
                 </div>
             </div>
         );

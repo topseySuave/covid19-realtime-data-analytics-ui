@@ -14,7 +14,7 @@ export default function LeftPanel() {
         labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
         datasets: [
             {
-                label: 'Drop Rate',
+                label: 'Increase Rate',
                 fill: true,
                 lineTension: 0.5,
                 backgroundColor: 'rgba(75,192,192,0.4)',
@@ -38,7 +38,7 @@ export default function LeftPanel() {
 
     return (
         <>
-            <section className="w-1/4 h-full bg-gray-900 z-10 absolute left-0 top-0 text-white overflow-y-scroll">
+            <section className="w-1/4 h-full bg-gray-900 z-10 absolute left-0 top-0 text-white overflow-y-scroll" id="scrollbar">
                 <div className="country-bg relative">
                     <img className="w-full opacity-50" src="https://raw.githubusercontent.com/NovelCOVID/API/master/assets/flags/ng.png" alt="Montenegro" />
                     <div className="absolute bottom-0 ml-5">
@@ -51,7 +51,7 @@ export default function LeftPanel() {
                         { infoTitle: 'Deaths Today', infoNumber: '6' }
                     ]} />
                     <Divider />
-                    <Card type="graph" graphData={data} />
+                    <Card type="graph" title="Increase Rate" graphData={data} />
                     <Divider />
                     <Card stats={[
                         { infoTitle: 'Recovered', infoNumber: 44 },

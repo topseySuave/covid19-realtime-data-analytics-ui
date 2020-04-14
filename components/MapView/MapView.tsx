@@ -65,8 +65,7 @@ const MapView = (props) => {
 
     return (
         <>
-            {/* hello world */}
-            <div className="marker" ref={mark => markerPointer = mark} />
+            <div className="marker" ref={el => markerPointer = el} />
             <div className='sidebarStyle'>
                 <div>Longitude: {state.lng} | Latitude: {state.lat} | Zoom: {state.zoom}</div>
                 <button className="btn" onClick={changeToStreet}> change to street</button>

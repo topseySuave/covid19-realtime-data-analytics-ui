@@ -2,19 +2,25 @@ import React from 'react';
 import { NextPage } from 'next';
 import fetch from 'isomorphic-unfetch';
 import dynamic from 'next/dynamic'
+import LeftPanel from '../components/LeftPanel'
 
-const MyMapView = dynamic(() => import('../components/MyMapView'),  { ssr: false })
+const MapView = dynamic(() => import('../components/MapView'), { ssr: false })
 
 interface Props {
 	userAgent: string
 }
 
 const Home: NextPage<Props> = (props) => {
-	console.log(' return ===> ', props);
+	// console.log(' return ===> ', props);
 
 	return (
-		<div>
-			<MyMapView />
+		<div className="flex">
+			<div className="w-1/4">
+				<LeftPanel />
+  		</div>
+			<div className="flex-1">
+				<MapView />
+  		</div>
 		</div>
 	);
 }

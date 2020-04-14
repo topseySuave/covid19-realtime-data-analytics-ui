@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import mapboxgl from 'mapbox-gl'
 
-const MyMapView = (props) => {
+const MapView = (props) => {
 
     mapboxgl.accessToken = process.env.MAP_BOX_TOKEN;
     let mapContainer, markerPointer, map;
@@ -38,7 +38,8 @@ const MyMapView = (props) => {
                 .addTo(map);
         })
 
-        map.on('move', () => {
+        map.on('click', () => {
+            console.log('hello world', map.getCenter());
             setState({
                 ...state,
                 lng: map.getCenter().lng.toFixed(4),
@@ -63,16 +64,19 @@ const MyMapView = (props) => {
     console.log(state);
 
     return (
-        <div>
+        <>
+            {/* hello world */}
             <div className="marker" ref={mark => markerPointer = mark} />
             <div className='sidebarStyle'>
                 <div>Longitude: {state.lng} | Latitude: {state.lat} | Zoom: {state.zoom}</div>
                 <button className="btn" onClick={changeToStreet}> change to street</button>
                 <button className="btn" onClick={changeToDark}> change to dark</button>
             </div>
-            <div ref={el => mapContainer = el} className='mapContainer' />
-        </div>
+            
+            <div ref={el => mapContainer = el} className="mapContainer" />
+            
+        </>
     );
 };
 
-export default MyMapView
+export default MapView

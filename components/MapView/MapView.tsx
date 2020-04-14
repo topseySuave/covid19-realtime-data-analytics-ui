@@ -11,6 +11,7 @@ const MapView = (props) => {
         lat: 34,
         zoom: 2,
         mapStyle: 'mapbox://styles/mapbox/dark-v10'
+        // mapStyle: 'mapbox://styles/mapbox/streets-v9'
         // mapStyle: 'mapbox://styles/mapbox/light-v10'
     })
 
@@ -38,7 +39,7 @@ const MapView = (props) => {
                 .addTo(map);
         })
 
-        map.on('click', () => {
+        map.on('move', () => {
             console.log('hello world', map.getCenter());
             setState({
                 ...state,
@@ -72,7 +73,7 @@ const MapView = (props) => {
                 <button className="btn" onClick={changeToDark}> change to dark</button>
             </div>
             
-            <div ref={el => mapContainer = el} className="mapContainer" />
+            <div ref={el => mapContainer = el} className="w-full h-full" />
             
         </>
     );

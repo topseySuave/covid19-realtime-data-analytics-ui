@@ -30,7 +30,7 @@ const Home: NextPage<Props> = (props) => {
 			<div className="w-1/4">
 				<LeftPanel intialCovData={props.data} />
 			</div>
-			<div className="flex-1">
+			<div className="flex-1 relative" style={{ width: '100vw', height: '100vh' }}>
 				<MapView />
 			</div>
 		</div>

@@ -1,6 +1,7 @@
 const path = require('path');
+const withImages = require('next-images');
 
-module.exports = {
+module.exports = withImages({
     env: {
         MAP_BOX_TOKEN: process.env.MAP_BOX_TOKEN,
     },
@@ -9,4 +10,4 @@ module.exports = {
         config.resolve.alias.components = path.resolve('./components');
         return config;
     },
-}
+})

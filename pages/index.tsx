@@ -7,30 +7,41 @@ import LeftPanel from '../components/LeftPanel'
 const MapView = dynamic(() => import('../components/MapView'), { ssr: false })
 
 interface Props {
-	userAgent: string
+	data: {
+		updated: number,
+		cases: number,
+		todayCases: number,
+		deaths: number,
+		todayDeaths: number,
+		recovered: number,
+		active: number,
+		critical: number,
+		casesPerOneMillion: number,
+		deathsPerOneMillion: number,
+		tests: number,
+		testsPerOneMillion: number,
+		affectedCountries: number
+	}
 }
 
 const Home: NextPage<Props> = (props) => {
-	// console.log(' return ===> ', props);
-
 	return (
 		<div className="flex">
 			<div className="w-1/4">
-				<LeftPanel />
-  		</div>
+				<LeftPanel intialCovData={props.data} />
+			</div>
 			<div className="flex-1">
 				<MapView />
-  		</div>
+			</div>
 		</div>
 	);
 }
 
 Home.getInitialProps = async ({ req }) => {
-	const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
-	const res = await fetch('https://corona.lmao.ninja/countries');
+	const res = await fetch('https://corona.lmao.ninja/all');
 	const data = await res.json();
 
-	return { userAgent, data };
+	return { data };
 };
 
 export default Home;

@@ -67279,6 +67279,7 @@ video {
   height: 40px;
   background-image: url('https://placekitten.com/g/40/40');
   background-repeat: no-repeat;
+  background-color: #333;
 }
 
 .btn{

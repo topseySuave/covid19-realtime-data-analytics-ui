@@ -38,7 +38,7 @@ const Home: NextPage<Props> = (props) => {
 }
 
 Home.getInitialProps = async ({ req }) => {
-	const res = await fetch('https://corona.lmao.ninja/all');
+	const res = await fetch('https://corona.lmao.ninja/v2/all');
 	const data = await res.json();
 
 	return { data };

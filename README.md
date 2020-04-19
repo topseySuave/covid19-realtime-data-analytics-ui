@@ -1,5 +1,16 @@
 # Covid-19 Realtime Data Analytics UI
 
+
+
+##### *Please note: This project is ongoing so it will not perform to an optimal level until completion.*
+
+### Technologies
+- React / [NextJs](http://nextjs.org/docs)
+- Typescript
+- [Tailwindcss](http://tailwindcss.com/docs)
+- [Mapbox](https://www.mapbox.com/)
+- Golang for the server [here](https://github.com/ObieWalker/covid19-analytics)
+
 #### Installation and contribution
 First Clone this repository
 with HTTP

@@ -36,7 +36,8 @@ interface PointProps {
 const MapView: React.FC<Props> = (props) => {
 
     const [state, setState] = useState({
-        points: []
+        points: [],
+        mapStyle: "mapbox://styles/mapbox/dark-v10"
     });
 
     const [viewport, setViewport] = useState({
@@ -48,7 +49,6 @@ const MapView: React.FC<Props> = (props) => {
         transitionInterpolator: new FlyToInterpolator(),
         transitionDuration: 1500,
         transitionEasing: d3.easeCubic,
-        mapStyle: "mapbox://styles/mapbox/dark-v10"
     });
 
     useEffect(() => {
@@ -89,10 +89,9 @@ const MapView: React.FC<Props> = (props) => {
     ));
 
     const changeMapTheme = () => {
-      setViewport({
-        ...viewport,
-        mapStyle:
-        viewport.mapStyle == "mapbox://styles/mapbox/streets-v11" ? 
+      setState({
+          ...state,
+        mapStyle: state.mapStyle == "mapbox://styles/mapbox/streets-v11" ? 
         'mapbox://styles/mapbox/dark-v10' : "mapbox://styles/mapbox/streets-v11"
       })
     }
@@ -102,7 +101,7 @@ const MapView: React.FC<Props> = (props) => {
     const sortByCategory = (category: string) => {
         const results = points.filter((data: DataPointProps) => data.properties.category == category)
         setState({
-            ...viewport,
+            ...state,
             points: results
         })
     }
@@ -123,7 +122,7 @@ const MapView: React.FC<Props> = (props) => {
                 maxZoom={30}
                 mapboxApiAccessToken={process.env.MAP_BOX_TOKEN}
                 onViewportChange={(newViewport: any) => setViewport({ ...newViewport })}
-                mapStyle={viewport.mapStyle ? viewport.mapStyle : "mapbox://styles/mapbox/dark-v10"}
+                mapStyle={state.mapStyle ? state.mapStyle : "mapbox://styles/mapbox/dark-v10"}
             >
                 {dataPoints.map((point: PointProps) => {
                   {

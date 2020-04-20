@@ -62,7 +62,7 @@ const MapView: React.FC<Props> = (props) => {
                 longitude: lng,
                 width: "100vw",
                 height: "100vh",
-                zoom: 3,
+                zoom: 4,
                 transitionInterpolator: new FlyToInterpolator(),
                 transitionDuration: 1500,
                 transitionEasing: d3.easeCubic

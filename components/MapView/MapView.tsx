@@ -63,7 +63,6 @@ const MapView: React.FC<Props> = (props) => {
               latitude: lat,
               longitude: lng,
               zoom: 4,
-              mapStyle: "mapbox://styles/mapbox/dark-v10"
           })
         }
     }, []);
@@ -93,8 +92,8 @@ const MapView: React.FC<Props> = (props) => {
       setViewport({
         ...viewport,
         mapStyle:
-        viewport.mapStyle == "mapbox://styles/mapbox/dark-v10" ? 
-        'mapbox://styles/mapbox/streets-v11' : "mapbox://styles/mapbox/dark-v10"
+        viewport.mapStyle == "mapbox://styles/mapbox/streets-v11" ? 
+        'mapbox://styles/mapbox/dark-v10' : "mapbox://styles/mapbox/streets-v11"
       })
     }
 
@@ -124,7 +123,7 @@ const MapView: React.FC<Props> = (props) => {
                 maxZoom={30}
                 mapboxApiAccessToken={process.env.MAP_BOX_TOKEN}
                 onViewportChange={(newViewport: any) => setViewport({ ...newViewport })}
-                mapStyle={viewport.mapStyle}
+                mapStyle={viewport.mapStyle ? viewport.mapStyle : "mapbox://styles/mapbox/dark-v10"}
             >
                 {dataPoints.map((point: PointProps) => {
                   {

@@ -47,26 +47,24 @@ const MapView: React.FC<Props> = (props) => {
         zoom: 2,
         transitionInterpolator: new FlyToInterpolator(),
         transitionDuration: 1500,
-        transitionEasing: d3.easeCubic
+        transitionEasing: d3.easeCubic,
+        mapStyle: "mapbox://styles/mapbox/dark-v10"
     });
 
     useEffect(() => {
         if (navigator.geolocation) navigator.geolocation.getCurrentPosition(displayLocationInfo);
 
         function displayLocationInfo(position: Position) {
-            const lng: number = position.coords.longitude;
-            const lat: number = position.coords.latitude;
+          const lng: number = position.coords.longitude;
+          const lat: number = position.coords.latitude;
 
-            setViewport({
-                latitude: lat,
-                longitude: lng,
-                width: "100vw",
-                height: "100vh",
-                zoom: 4,
-                transitionInterpolator: new FlyToInterpolator(),
-                transitionDuration: 1500,
-                transitionEasing: d3.easeCubic
-            })
+          setViewport({
+              ...viewport,
+              latitude: lat,
+              longitude: lng,
+              zoom: 4,
+              mapStyle: "mapbox://styles/mapbox/dark-v10"
+          })
         }
     }, []);
 
@@ -91,6 +89,15 @@ const MapView: React.FC<Props> = (props) => {
     }
     ));
 
+    const changeMapTheme = () => {
+      setViewport({
+        ...viewport,
+        mapStyle:
+        viewport.mapStyle == "mapbox://styles/mapbox/dark-v10" ? 
+        'mapbox://styles/mapbox/streets-v11' : "mapbox://styles/mapbox/dark-v10"
+      })
+    }
+
     const dataPoints = state.points && state.points.length > 1 ? state.points : points
 
     const sortByCategory = (category: string) => {
@@ -110,53 +117,55 @@ const MapView: React.FC<Props> = (props) => {
                 <button onClick={() => sortByCategory("Considerable")}> Considerable</button>
                 <button onClick={() => sortByCategory("Critical")}> Critical</button>
                 <button onClick={() => sortByCategory("")}> Clear</button>
+                <button onClick={changeMapTheme}> Change Map Theme</button>
             </div>
             <ReactMapGL
                 {...viewport}
                 maxZoom={30}
                 mapboxApiAccessToken={process.env.MAP_BOX_TOKEN}
                 onViewportChange={(newViewport: any) => setViewport({ ...newViewport })}
-                mapStyle="mapbox://styles/mapbox/dark-v10"
+                mapStyle={viewport.mapStyle}
             >
                 {dataPoints.map((point: PointProps) => {
-                    {
-                        const [longitude, latitude] = point.geometry.coordinates;
-                        const { id, cases, casesPerMillion } = point.properties;
-                        const { backgroundColor, size, fontSize }: any = clusterStyle(casesPerMillion)
+                  {
+                    const [longitude, latitude] = point.geometry.coordinates;
+                    const { id, cases, casesPerMillion } = point.properties;
+                    const { backgroundColor, size, fontSize }: any = clusterStyle(casesPerMillion)
 
-                        return (
-                            <Marker
-                                key={id}
-                                latitude={latitude}
-                                longitude={longitude}
-                            >
-                                <div
-                                    className="cluster-marker"
-                                    style={{
-                                        width: `${size}px`,
-                                        height: `${size}px`,
-                                        backgroundColor,
-                                        fontSize: `${fontSize}em`,
-                                    }}
-                                // onClick={() => {
-                                //   console.log("Country>>", point.Country)
+                    return (
+                      <Marker
+                          key={id}
+                          latitude={latitude}
+                          longitude={longitude}
+                      >
+                          <div
+                              className="cluster-marker"
+                              style={{
+                                  width: `${size}px`,
+                                  height: `${size}px`,
+                                  backgroundColor,
+                                  fontSize: `${fontSize}em`,
+                              }}
+                          // onClick={() => {
+                          //   console.log("Country>>", point.Country)
 
-                                // setViewport({
-                                //   ...viewport,
-                                //   latitude,
-                                //   longitude,
-                                //   zoom: viewport.zoom + 1,
-                                // transitionInterpolator: new FlyToInterpolator({
-                                //   speed: 2
-                                // }),
-                                // transitionDuration: "auto"
-                                //   });
-                                // }}
-                                >
-                                    {cases}
-                                </div>
-                            </Marker>)
-                    }
+                          // setViewport({
+                          //   ...viewport,
+                          //   latitude,
+                          //   longitude,
+                          //   zoom: viewport.zoom + 1,
+                          // transitionInterpolator: new FlyToInterpolator({
+                          //   speed: 2
+                          // }),
+                          // transitionDuration: "auto"
+                          //   });
+                          // }}
+                          >
+                              {cases}
+                          </div>
+                      </Marker>
+                    )
+                  }
                 }
                 )}
             </ReactMapGL>

@@ -12,7 +12,7 @@
     margin: 12px;
     background-color: #404040;
     color: #ffffff;
-    z-index: 1 !important;
+    z-index: 10 !important;
     padding: 6px;
     font-weight: bold;
 }
@@ -36,6 +36,16 @@
     background-image: url('https://placekitten.com/g/40/40');
     background-repeat: no-repeat;
     background-color: #333;
+    color: red
+}
+
+.cluster-marker {
+    border-radius: 50%;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0.7;
 }
 
 .btn{
@@ -44,6 +54,26 @@
     padding: 8px 12px;
     font-size: medium;
     cursor: pointer;
+}
+
+.btn1{
+    /* margin: auto */
+    position: absolute
+}
+
+.btn2{
+    position: absolute;
+    margin: 0 80px
+}
+
+.btn3{
+    position: absolute;
+    margin: 0 200px
+}
+
+.btn4{
+    position: absolute;
+    margin: 0 350px
 }
 
 #scrollbar::-webkit-scrollbar-track{

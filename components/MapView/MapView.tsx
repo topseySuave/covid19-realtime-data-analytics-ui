@@ -59,7 +59,7 @@ const MapView = (props) => {
   const dataPoints = viewport.points && viewport.points.length > 1 ? viewport.points : points
 
   const sortByCategory = (category) => {
-    const results = dataPoints.filter(data => data.properties.category == category)
+    const results = points.filter(data => data.properties.category == category)
     setViewport({
       ...viewport,
       points: results

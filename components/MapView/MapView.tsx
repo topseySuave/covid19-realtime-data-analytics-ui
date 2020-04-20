@@ -1,82 +1,168 @@
-import React, { useState, useEffect } from 'react'
-import mapboxgl from 'mapbox-gl'
+import React, { useState, useEffect, useRef } from 'react'
+import ReactMapGL, { Marker, ViewportProps, FlyToInterpolator } from "react-map-gl";
+import * as d3 from 'd3-ease';
+import { clusterStyle, groupByCritical } from '../../utils/helpers'
 
-const MapView = (props) => {
+interface Props {
+    countriesData: any;
+}
+interface CountryProps {
+    ID: any;
+    CasesPerOneMillion: number;
+    Cases: number;
+    CountryInfo: {
+        Long: number;
+        Lat: number;
+    };
+}
 
-    mapboxgl.accessToken = process.env.MAP_BOX_TOKEN;
-    let mapContainer, markerPointer, map;
+interface DataPointProps {
+    properties: {
+        category: string;
+    };
+}
+
+interface PointProps {
+    geometry: {
+        coordinates: [number, number];
+    };
+    properties: {
+        id: string;
+        cases: number;
+        casesPerMillion: number;
+    };
+}
+
+const MapView: React.FC<Props> = (props) => {
 
     const [state, setState] = useState({
-        lng: 5,
-        lat: 34,
+        points: []
+    });
+
+    const [viewport, setViewport] = useState({
+        latitude: 5,
+        longitude: 34,
+        width: "100vw",
+        height: "100vh",
         zoom: 2,
-        mapStyle: 'mapbox://styles/mapbox/dark-v10'
-        // mapStyle: 'mapbox://styles/mapbox/streets-v9'
-        // mapStyle: 'mapbox://styles/mapbox/light-v10'
-    })
+        transitionInterpolator: new FlyToInterpolator(),
+        transitionDuration: 1500,
+        transitionEasing: d3.easeCubic
+    });
 
     useEffect(() => {
-        map = new mapboxgl.Map({
-            container: mapContainer,
-            style: state.mapStyle,
-            center: [state.lng, state.lat],
-            zoom: state.zoom
-        });
+        if (navigator.geolocation) navigator.geolocation.getCurrentPosition(displayLocationInfo);
 
-        // Add geolocate control to the map.
-        map.addControl(
-            new mapboxgl.GeolocateControl({
-                positionOptions: {
-                    enableHighAccuracy: true
-                },
-                trackUserLocation: true
+        function displayLocationInfo(position: Position) {
+            const lng: number = position.coords.longitude;
+            const lat: number = position.coords.latitude;
+
+            setViewport({
+                latitude: lat,
+                longitude: lng,
+                width: "100vw",
+                height: "100vh",
+                zoom: 3,
+                transitionInterpolator: new FlyToInterpolator(),
+                transitionDuration: 1500,
+                transitionEasing: d3.easeCubic
             })
-        );
+        }
+    }, []);
 
-        map.on('load', () => {
-            new mapboxgl.Marker(markerPointer)
-                .setLngLat([state.lng, state.lat])
-                .addTo(map);
-        })
-
-        map.on('move', () => {
-            console.log('hello world', map.getCenter());
-            setState({
-                ...state,
-                lng: map.getCenter().lng.toFixed(4),
-                lat: map.getCenter().lat.toFixed(4),
-                zoom: map.getZoom().toFixed(2),
-            })
-        })
-    }, [])
-
-    console.log(' return ===> ', props);
-
-    const changeToDark = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        e.preventDefault()
-        return map.setStyle('mapbox://styles/mapbox/dark-v10')
+    const { countriesData } = props
+    const data: any = countriesData.length > 0 ? countriesData : [];
+    const points = data.map((country: CountryProps) => ({
+        type: "Feature",
+        properties: {
+            cluster: false,
+            id: country.ID,
+            category: groupByCritical(country.CasesPerOneMillion),
+            cases: country.Cases,
+            casesPerMillion: country.CasesPerOneMillion
+        },
+        geometry: {
+            type: "Point",
+            coordinates: [
+                country.CountryInfo.Long,
+                country.CountryInfo.Lat
+            ]
+        }
     }
+    ));
 
-    const changeToStreet = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        e.preventDefault()
-        return map.setStyle('mapbox://styles/mapbox/streets-v11')
+    const dataPoints = state.points && state.points.length > 1 ? state.points : points
+
+    const sortByCategory = (category: string) => {
+        const results = points.filter((data: DataPointProps) => data.properties.category == category)
+        setState({
+            ...viewport,
+            points: results
+        })
     }
-
-    console.log(state);
 
     return (
         <>
-            <div className="marker" ref={el => markerPointer = el} />
             <div className='sidebarStyle'>
-                <div>Longitude: {state.lng} | Latitude: {state.lat} | Zoom: {state.zoom}</div>
-                <button className="btn" onClick={changeToStreet}> change to street</button>
-                <button className="btn" onClick={changeToDark}> change to dark</button>
+                <p>Sort By: </p>
+                <button onClick={() => sortByCategory("Minor")}> Minor</button>
+                <button onClick={() => sortByCategory("Moderate")}> Moderate</button>
+                <button onClick={() => sortByCategory("Considerable")}> Considerable</button>
+                <button onClick={() => sortByCategory("Critical")}> Critical</button>
+                <button onClick={() => sortByCategory("")}> Clear</button>
             </div>
-            
-            <div ref={el => mapContainer = el} className="w-full h-full" />
-            
+            <ReactMapGL
+                {...viewport}
+                maxZoom={30}
+                mapboxApiAccessToken={process.env.MAP_BOX_TOKEN}
+                onViewportChange={(newViewport: any) => setViewport({ ...newViewport })}
+                mapStyle="mapbox://styles/mapbox/dark-v10"
+            >
+                {dataPoints.map((point: PointProps) => {
+                    {
+                        const [longitude, latitude] = point.geometry.coordinates;
+                        const { id, cases, casesPerMillion } = point.properties;
+                        const { backgroundColor, size, fontSize }: any = clusterStyle(casesPerMillion)
+
+                        return (
+                            <Marker
+                                key={id}
+                                latitude={latitude}
+                                longitude={longitude}
+                            >
+                                <div
+                                    className="cluster-marker"
+                                    style={{
+                                        width: `${size}px`,
+                                        height: `${size}px`,
+                                        backgroundColor,
+                                        fontSize: `${fontSize}em`,
+                                    }}
+                                // onClick={() => {
+                                //   console.log("Country>>", point.Country)
+
+                                // setViewport({
+                                //   ...viewport,
+                                //   latitude,
+                                //   longitude,
+                                //   zoom: viewport.zoom + 1,
+                                // transitionInterpolator: new FlyToInterpolator({
+                                //   speed: 2
+                                // }),
+                                // transitionDuration: "auto"
+                                //   });
+                                // }}
+                                >
+                                    {cases}
+                                </div>
+                            </Marker>)
+                    }
+                }
+                )}
+            </ReactMapGL>
         </>
     );
-};
+
+}
 
 export default MapView

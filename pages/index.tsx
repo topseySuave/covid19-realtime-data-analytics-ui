@@ -21,7 +21,8 @@ interface Props {
 		tests: number,
 		testsPerOneMillion: number,
 		affectedCountries: number
-	}
+	},
+	countries: any
 }
 
 const Home: NextPage<Props> = (props) => {
@@ -31,17 +32,21 @@ const Home: NextPage<Props> = (props) => {
 				<LeftPanel intialCovData={props.data} />
 			</div>
 			<div className="flex-1 relative" style={{ width: '100vw', height: '100vh' }}>
-				<MapView />
+				<MapView 
+				countriesData={props.countries}
+				/>
 			</div>
 		</div>
 	);
 }
 
 Home.getInitialProps = async ({ req }) => {
-	const res = await fetch('https://corona.lmao.ninja/v2/all');
+	const res = await fetch(process.env.GET_ALL_COUNTRIES);
+	const countriesData = await fetch(process.env.GET_COUNTRIES_DATA)
 	const data = await res.json();
+	const countries = await countriesData.json()
 
-	return { data };
+	return { data, countries };
 };
 
 export default Home;

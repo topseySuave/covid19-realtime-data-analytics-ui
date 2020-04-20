@@ -88,6 +88,9 @@ const MapView = (props) => {
         <div className='sidebarStyle'>
           <button className="btn4" onClick={()=>{sortByCategory("Critical")}}> Critical</button>
         </div>
+        <div className='sidebarStyle'>
+          <button className="btn5" onClick={()=>{sortByCategory("")}}> Clear</button>
+        </div>
       </div>
 
       {dataPoints.map(point => {

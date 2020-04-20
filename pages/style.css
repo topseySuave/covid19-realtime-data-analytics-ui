@@ -68,12 +68,17 @@
 
 .btn3{
     position: absolute;
-    margin: 0 200px
+    margin: 0 180px
 }
 
 .btn4{
     position: absolute;
-    margin: 0 350px
+    margin: 0 320px
+}
+
+.btn5{
+    position: absolute;
+    margin: 0 400px
 }
 
 #scrollbar::-webkit-scrollbar-track{

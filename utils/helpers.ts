@@ -8,15 +8,15 @@ export const clusterStyle = (casesPerMil) => {
                 : casesPerMil < 1000 ? "#F0932C"
                 : "#AF3014"
 
-    const size = casesPerMil < 50 ? "30"
-                : casesPerMil < 100 ? "40"
-                : casesPerMil < 1000 ? "60"
-                : "90"
+    const size = casesPerMil < 50 ? "10"
+                : casesPerMil < 100 ? "20"
+                : casesPerMil < 1000 ? "40"
+                : "60"
     
-    const fontSize = casesPerMil < 50 ? "10"
-                : casesPerMil < 100 ? "15"
-                : casesPerMil < 1000 ? "20"
-                : "25"
+    const fontSize = casesPerMil < 50 ? ".5"
+                : casesPerMil < 100 ? ".6"
+                : casesPerMil < 1000 ? ".8"
+                : "1"
 
     return { backgroundColor, size, fontSize }
 }

@@ -6,9 +6,12 @@
     "build:css": "tailwindcss build ./pages/style.css -o ./pages/output.css"
   },
   "dependencies": {
+    "@types/d3-ease": "^1.0.9",
     "@types/node": "^13.11.0",
     "@types/react": "^16.9.32",
+    "@types/react-map-gl": "^5.2.2",
     "chart.js": "^2.9.3",
+    "d3-ease": "^1.0.6",
     "isomorphic-unfetch": "^3.0.0",
     "leaflet": "^1.6.0",
     "mapbox-gl": "^1.9.1",

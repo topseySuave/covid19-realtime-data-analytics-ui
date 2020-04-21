@@ -29,3 +29,11 @@ export const groupByCritical = (casesPerMil) => {
 
     return category
 }
+
+export 	const arraySubtraction = (arr) => {
+    let newArr = []
+    for (let i = 0; i < 14; i++){
+        newArr.push(Math.abs(arr[i]-arr[i+1]))
+     }
+     return newArr;
+ }

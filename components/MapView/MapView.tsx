@@ -1,38 +1,14 @@
-import React, { useState, useEffect, useRef } from 'react'
-import ReactMapGL, { Marker, ViewportProps, FlyToInterpolator } from "react-map-gl";
+import React, { useState, useEffect } from 'react'
+import ReactMapGL, { Marker, FlyToInterpolator } from "react-map-gl";
 import * as d3 from 'd3-ease';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSun, faMoon } from '@fortawesome/free-solid-svg-icons'
 import { clusterStyle, groupByCritical } from '../../utils/helpers'
+import { CountryProps, countryPointsProps } from '../../pages'
 
 interface Props {
-    countriesData: any;
-    getData: any
-}
-interface CountryProps {
-    ID: any;
-    Country: string;
-    CasesPerOneMillion: number;
-    Cases: number;
-    TodayCases: number;
-    Updated: number;
-    Deaths: number;
-    TodayDeaths: number;
-    Recovered: number;
-    Active: number;
-    Critical: number;
-    DeathsPerOneMillion: number;
-    Tests: number;
-    TestsPerOneMillion: number;
-    AffectedCountries: number;
-    FortnightCases: Array<number>;
-    DropRate: number;
-    OneWeekProjection: number;
-    CountryInfo: {
-        Long: number;
-        Lat: number;
-        Flag: string
-    };
+    countriesData: Array<CountryProps>;
+    getData: (properties: countryPointsProps) => void
 }
 
 interface DataPointProps {
@@ -45,28 +21,7 @@ interface PointProps {
     geometry: {
         coordinates: [number, number];
     };
-    properties: {
-        id: string;
-        cases: number;
-        casesPerMillion: number;
-        country: string;
-        todayCases: number;
-        updated: number;
-        deaths: number;
-        todayDeaths: number;
-        recovered: number;
-        active: number;
-        critical: number;
-        casesPerOneMillion: number;
-        deathsPerOneMillion: number;
-        tests: number;
-        testsPerOneMillion: number;
-        affectedCountries: number;
-        flag: string;
-        fortnightCases: Array<number>;
-        dropRate: number;
-        oneWeekProjection: number;
-    };
+    properties: countryPointsProps;
 }
 
 const MapView: React.FC<Props> = (props) => {
@@ -109,28 +64,28 @@ const MapView: React.FC<Props> = (props) => {
     const points = data.map((country: CountryProps) => ({
         type: "Feature",
         properties: {
-          cluster: false,
-          id: country.ID,
-          category: groupByCritical(country.CasesPerOneMillion),
-          cases: country.Cases,
-          todayCases: country.TodayCases,
-          casesPerMillion: country.CasesPerOneMillion,
-          country: country.Country,
-          updated: country.Updated,
-          deaths: country.Deaths,
-          todayDeaths: country.TodayDeaths,
-          recovered: country.Recovered,
-          active: country.Active,
-          critical: country.Critical,
-          casesPerOneMillion: country.CasesPerOneMillion,
-          deathsPerOneMillion: country.DeathsPerOneMillion,
-          tests: country.Tests,
-          testsPerOneMillion: country.TestsPerOneMillion,
-          affectedCountries: country.AffectedCountries,
-          flag: country.CountryInfo.Flag,
-          fortnightCases: country.FortnightCases,
-          dropRate: country.DropRate,
-          oneWeekProjection: country.OneWeekProjection
+            cluster: false,
+            id: country.ID,
+            category: groupByCritical(country.CasesPerOneMillion),
+            cases: country.Cases,
+            todayCases: country.TodayCases,
+            casesPerMillion: country.CasesPerOneMillion,
+            country: country.Country,
+            updated: country.Updated,
+            deaths: country.Deaths,
+            todayDeaths: country.TodayDeaths,
+            recovered: country.Recovered,
+            active: country.Active,
+            critical: country.Critical,
+            casesPerOneMillion: country.CasesPerOneMillion,
+            deathsPerOneMillion: country.DeathsPerOneMillion,
+            tests: country.Tests,
+            testsPerOneMillion: country.TestsPerOneMillion,
+            affectedCountries: country.AffectedCountries,
+            flag: country.CountryInfo.Flag,
+            fortnightCases: country.FortnightCases,
+            dropRate: country.DropRate,
+            oneWeekProjection: country.OneWeekProjection
         },
         geometry: {
             type: "Point",
@@ -163,7 +118,7 @@ const MapView: React.FC<Props> = (props) => {
     const addClass = (activeStyle: number) => {
         return [`rounded-full h-fit-content py-1 px-5 ${state.activeStyle === activeStyle ? 'bg-gray-800' : 'bg-transparent'}`].join()
     }
-    
+
     return (
         <>
             <div className='sidebarStyle w-3/4 flex justify-between'>
@@ -188,32 +143,32 @@ const MapView: React.FC<Props> = (props) => {
                 mapStyle={state.mapStyle ? state.mapStyle : "mapbox://styles/mapbox/dark-v10"}
             >
                 {dataPoints.map((point: PointProps) => {
-                  {
-                    const [longitude, latitude] = point.geometry.coordinates;
-                    const { id, cases, casesPerMillion } = point.properties;
-                    const { backgroundColor, size, fontSize }: any = clusterStyle(casesPerMillion)
+                    {
+                        const [longitude, latitude] = point.geometry.coordinates;
+                        const { id, cases, casesPerMillion } = point.properties;
+                        const { backgroundColor, size, fontSize }: any = clusterStyle(casesPerMillion)
 
-                    return (
-                      <Marker
-                          key={id}
-                          latitude={latitude}
-                          longitude={longitude}
-                      >
-                          <div
-                              className="cluster-marker"
-                              style={{
-                                  width: `${size}px`,
-                                  height: `${size}px`,
-                                  backgroundColor,
-                                  fontSize: `${fontSize}em`,
-                              }}
-                          onClick={() => getData(point.properties)}
-                          >
-                            {cases}
-                          </div>
-                      </Marker>
-                    )
-                  }
+                        return (
+                            <Marker
+                                key={id}
+                                latitude={latitude}
+                                longitude={longitude}
+                            >
+                                <div
+                                    className="cluster-marker"
+                                    style={{
+                                        width: `${size}px`,
+                                        height: `${size}px`,
+                                        backgroundColor,
+                                        fontSize: `${fontSize}em`,
+                                    }}
+                                    onClick={() => getData(point.properties)}
+                                >
+                                    {cases}
+                                </div>
+                            </Marker>
+                        )
+                    }
                 }
                 )}
             </ReactMapGL>

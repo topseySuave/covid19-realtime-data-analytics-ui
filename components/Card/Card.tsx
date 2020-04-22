@@ -11,7 +11,7 @@ type Datasets = {
 };
 
 interface Data {
-	stats?: Props[];
+	stats?: Array<Props>;
 	type?: 'graph' | 'infoStat';
 	title?: string;
 	graphData?: {
@@ -44,10 +44,10 @@ export const Card: React.FC<Data> = ({ stats, title, type, graphData }) => {
 					</div>
 					{
 						stats[1] &&
-							<div className="ml-10">
-								<div className="text-center font-bold text-4xl text-red-600">{stats[1].infoNumber}</div>
-								<p className="text-center text-gray-500 text-sm">{stats[1].infoTitle}</p>
-							</div>
+						<div className="ml-10">
+							<div className="text-center font-bold text-4xl text-red-600">{stats[1].infoNumber}</div>
+							<p className="text-center text-gray-500 text-sm">{stats[1].infoTitle}</p>
+						</div>
 					}
 				</div>
 			</div>

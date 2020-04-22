@@ -161,6 +161,7 @@ const MapView: React.FC<Props> = (props) => {
                                         height: `${size}px`,
                                         backgroundColor,
                                         fontSize: `${fontSize}em`,
+                                        cursor: 'pointer'
                                     }}
                                     onClick={() => getData(point.properties)}
                                 >

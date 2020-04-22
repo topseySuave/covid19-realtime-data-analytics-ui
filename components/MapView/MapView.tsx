@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react'
 import ReactMapGL, { Marker, ViewportProps, FlyToInterpolator } from "react-map-gl";
 import * as d3 from 'd3-ease';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSun, faMoon } from '@fortawesome/free-solid-svg-icons'
 import { clusterStyle, groupByCritical } from '../../utils/helpers'
 
 interface Props {
@@ -71,6 +73,7 @@ const MapView: React.FC<Props> = (props) => {
 
     const [state, setState] = useState({
         points: [],
+        activeStyle: 1,
         mapStyle: "mapbox://styles/mapbox/dark-v10"
     });
 
@@ -89,15 +92,15 @@ const MapView: React.FC<Props> = (props) => {
         if (navigator.geolocation) navigator.geolocation.getCurrentPosition(displayLocationInfo);
 
         function displayLocationInfo(position: Position) {
-          const lng: number = position.coords.longitude;
-          const lat: number = position.coords.latitude;
+            const lng: number = position.coords.longitude;
+            const lat: number = position.coords.latitude;
 
-          setViewport({
-              ...viewport,
-              latitude: lat,
-              longitude: lng,
-              zoom: 4,
-          })
+            setViewport({
+                ...viewport,
+                latitude: lat,
+                longitude: lng,
+                zoom: 4,
+            })
         }
     }, []);
 
@@ -139,12 +142,12 @@ const MapView: React.FC<Props> = (props) => {
     }
     ));
 
-    const changeMapTheme = () => {
-      setState({
-          ...state,
-        mapStyle: state.mapStyle == "mapbox://styles/mapbox/streets-v11" ? 
-        'mapbox://styles/mapbox/dark-v10' : "mapbox://styles/mapbox/streets-v11"
-      })
+    const changeMapTheme = (mapStyle: string, activeStyle: number) => {
+        setState({
+            ...state,
+            mapStyle,
+            activeStyle
+        })
     }
 
     const dataPoints = state.points && state.points.length > 1 ? state.points : points
@@ -157,16 +160,25 @@ const MapView: React.FC<Props> = (props) => {
         })
     }
 
+    const addClass = (activeStyle: number) => {
+        return [`rounded-full h-fit-content py-1 px-5 ${state.activeStyle === activeStyle ? 'bg-gray-800' : 'bg-transparent'}`].join()
+    }
+    
     return (
         <>
-            <div className='sidebarStyle'>
-                <p>Sort By: </p>
-                <button onClick={() => sortByCategory("Minor")}> Minor</button>
-                <button onClick={() => sortByCategory("Moderate")}> Moderate</button>
-                <button onClick={() => sortByCategory("Considerable")}> Considerable</button>
-                <button onClick={() => sortByCategory("Critical")}> Critical</button>
-                <button onClick={() => sortByCategory("")}> Clear</button>
-                <button onClick={changeMapTheme}> Change Map Theme</button>
+            <div className='sidebarStyle w-3/4 flex justify-between'>
+                <div className="border border-gray-200 bg-gray-700 rounded-full h-fit-content ml-5">
+                    <button className={addClass(0)} onClick={() => changeMapTheme('mapbox://styles/mapbox/light-v10', 0)}><FontAwesomeIcon size="lg" icon={faSun} /></button>
+                    <button className={addClass(1)} onClick={() => changeMapTheme('mapbox://styles/mapbox/dark-v10', 1)}> <FontAwesomeIcon size="lg" icon={faMoon} /></button>
+                </div>
+                <div className="">
+                    <p className={[`${state.activeStyle === 0 && 'text-black'}`].join()}>Sort By:</p>
+                    <button className="border border-green-600 text-white bg-gray-700 opacity-75 rounded-full py-1 px-5 mr-2" onClick={() => sortByCategory("Minor")}> Minor</button>
+                    <button className="border border-yellow-500 text-white bg-gray-700 opacity-75 rounded-full py-1 px-5 mr-2" onClick={() => sortByCategory("Moderate")}>Moderate</button>
+                    <button className="border border-orange-600 bg-gray-700 opacity-75 rounded-full py-1 px-5 mr-2" onClick={() => sortByCategory("Considerable")}> Considerable</button>
+                    <button className="border border-red-600 bg-gray-700 opacity-75 rounded-full py-1 px-5 mr-2" onClick={() => sortByCategory("Critical")}> Critical</button>
+                    <button className="border border-gray-200 bg-gray-700 opacity-75 rounded-full py-1 px-5 mr-2" onClick={() => sortByCategory("")}> All</button>
+                </div>
             </div>
             <ReactMapGL
                 {...viewport}

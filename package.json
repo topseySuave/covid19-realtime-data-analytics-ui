@@ -6,6 +6,10 @@
     "build:css": "tailwindcss build ./pages/style.css -o ./pages/output.css"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.13.0",
+    "@fortawesome/fontawesome-svg-core": "^1.2.28",
+    "@fortawesome/free-solid-svg-icons": "^5.13.0",
+    "@fortawesome/react-fontawesome": "^0.1.9",
     "@types/d3-ease": "^1.0.9",
     "@types/node": "^13.11.0",
     "@types/react": "^16.9.32",

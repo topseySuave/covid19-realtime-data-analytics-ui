@@ -7,7 +7,7 @@ const worldFlag = require('../assets/earth.png')
 
 interface PanelProps {
 	panelData: countryPointsProps;
-	theme?: number;
+	theme: string;
 }
 
 export default function LeftPanel({ panelData, theme }: PanelProps) {
@@ -83,19 +83,19 @@ export default function LeftPanel({ panelData, theme }: PanelProps) {
 		)
 	}
 
-	const CardsClassName = `w-full rounded-lg overflow-hidden shadow-lg mb-2 ${theme === 1 ? 'bg-gray-800' : 'bg-gray-100'}`;
+	const CardsClassName = `w-full rounded-lg overflow-hidden shadow-lg mb-2 ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'}`;
 
 	return (
-		<section className={`w-1/4 h-full z-10 absolute left-0 top-0 text-white overflow-y-scroll ${theme === 1 ? ' bg-gray-900' : 'bg-gray-400'}`} id="scrollbar">
+		<section className={`w-1/4 h-full z-10 absolute left-0 top-0 text-white overflow-y-scroll ${theme === 'dark' ? ' bg-gray-900' : 'bg-gray-400'}`} id="scrollbar">
 			<div className="country-bg relative w-full h-40 overflow-y-hidden">
 				<img className="w-full opacity-25 -mt-10" src={panelData.flag || worldFlag} alt="Montenegro" />
 				<div className="absolute bottom-0 ml-5">
 					<h1 className="text-4xl font-bold text-red-600">{formatNumber(panelData.cases)}</h1>
-					<h1 className={`text-2xl ${theme === 1 ? 'text-gray-400' : 'text-gray-900'}`}>Total Cases</h1>
+					<h1 className={`text-2xl ${theme === 'dark' ? 'text-gray-400' : 'text-gray-900'}`}>Total Cases</h1>
 					{panelData.affectedCountries ?
 						<>
 							<h1 className="text-2xl font-bold text-red-600">{formatNumber(panelData.affectedCountries)}</h1>
-							<h1 className={`text-2xl ${theme === 1 ? 'text-gray-400' : 'text-gray-900'}`}>Affected Countries</h1>
+							<h1 className={`text-2xl ${theme === 'dark' ? 'text-gray-400' : 'text-gray-900'}`}>Affected Countries</h1>
 						</>
 						:
 						<h1 className="text-2xl font-bold text-red-600">{(panelData.country).toUpperCase()}</h1>

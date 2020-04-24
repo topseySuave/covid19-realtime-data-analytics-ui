@@ -8,8 +8,9 @@ import { CountryProps, countryPointsProps } from '../../pages'
 
 interface Props {
     countriesData: Array<CountryProps>;
-    getData: (properties: countryPointsProps) => void
-	changeLeftPanelTheme?: (theme: number) => void
+    getData: (properties: countryPointsProps) => void;
+    changeLeftPanelTheme?: (theme: number) => void;
+    activeTheme: number
 }
 
 interface DataPointProps {
@@ -29,8 +30,8 @@ const MapView: React.FC<Props> = (props) => {
 
     const [state, setState] = useState({
         points: [],
-        activeStyle: 1,
-        mapStyle: "mapbox://styles/mapbox/dark-v10"
+        activeStyle: props.activeTheme,
+        mapStyle: props.activeTheme === 1 ? "mapbox://styles/mapbox/dark-v10" : "mapbox://styles/mapbox/light-v10"
     });
 
     const [viewport, setViewport] = useState({
@@ -105,6 +106,10 @@ const MapView: React.FC<Props> = (props) => {
             mapStyle,
             activeStyle
         })
+
+        if (localStorage.getItem('cov-theme') !== activeStyle.toString()) {
+            localStorage.setItem('cov-theme', activeStyle.toString())
+        }
     }
 
     const dataPoints = state.points && state.points.length > 1 ? state.points : points

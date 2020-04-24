@@ -80,15 +80,18 @@ interface Props {
 	history: HistoryProps;
 }
 
+export const isBrowser = process.browser && true;
+
 const Home: NextPage<Props> = (props) => {
+    const activeTheme = isBrowser && parseInt(localStorage.getItem('cov-theme'), 10)
 
 	const [state, setState] = useState({
 		countryData: null,
-		theme: 1
+		theme: activeTheme === 1 ? 1 : 0
 	})
 
 	const changeLeftPanelTheme = (theme: number) => {
-		setState({ ...state, theme: theme })
+		setState({ ...state, theme })
 	}
 
 	const getData = (countryData: countryPointsProps) => {
@@ -120,6 +123,7 @@ const Home: NextPage<Props> = (props) => {
 					countriesData={props.countries}
 					getData={getData}
 					changeLeftPanelTheme={changeLeftPanelTheme}
+					activeTheme={state.theme}
 				/>
 			</div>
 		</div>

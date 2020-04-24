@@ -9,6 +9,7 @@ import { CountryProps, countryPointsProps } from '../../pages'
 interface Props {
     countriesData: Array<CountryProps>;
     getData: (properties: countryPointsProps) => void
+	changeLeftPanelTheme?: (theme: number) => void
 }
 
 interface DataPointProps {
@@ -59,7 +60,7 @@ const MapView: React.FC<Props> = (props) => {
         }
     }, []);
 
-    const { countriesData, getData } = props
+    const { countriesData, getData, changeLeftPanelTheme } = props
     const data: any = countriesData.length > 0 ? countriesData : [];
     const points = data.map((country: CountryProps) => ({
         type: "Feature",
@@ -98,6 +99,7 @@ const MapView: React.FC<Props> = (props) => {
     ));
 
     const changeMapTheme = (mapStyle: string, activeStyle: number) => {
+        changeLeftPanelTheme(activeStyle)
         setState({
             ...state,
             mapStyle,

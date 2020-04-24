@@ -80,14 +80,22 @@ interface Props {
 	history: HistoryProps;
 }
 
+export const isBrowser = process.browser && true;
+
 const Home: NextPage<Props> = (props) => {
+    const activeTheme = isBrowser && parseInt(localStorage.getItem('cov-theme'), 10)
 
 	const [state, setState] = useState({
-		countryData: null
+		countryData: null,
+		theme: activeTheme === 1 ? 1 : 0
 	})
 
+	const changeLeftPanelTheme = (theme: number) => {
+		setState({ ...state, theme })
+	}
+
 	const getData = (countryData: countryPointsProps) => {
-		setState({ countryData })
+		setState({ ...state, countryData })
 	}
 
 	const handleHistory = (props: HistoryProps) => {
@@ -107,12 +115,15 @@ const Home: NextPage<Props> = (props) => {
 			<div className="w-1/4">
 				<LeftPanel
 					panelData={state.countryData || { ...handleHistory(props.history), ...props.data }}
+					theme={state.theme}
 				/>
 			</div>
 			<div className="flex-1 relative" style={{ width: '100vw', height: '100vh' }}>
 				<MapView
 					countriesData={props.countries}
 					getData={getData}
+					changeLeftPanelTheme={changeLeftPanelTheme}
+					activeTheme={state.theme}
 				/>
 			</div>
 		</div>

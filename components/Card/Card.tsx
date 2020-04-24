@@ -17,13 +17,14 @@ interface Data {
 	graphData?: {
 		labels: Array<String>;
 		datasets: Array<Datasets>;
-	}
+	};
+	className?: string;
 }
 
-export const Card: React.FC<Data> = ({ stats, title, type, graphData }) => {
+export const Card: React.FC<Data> = ({ stats, title, type, graphData, className }) => {
 	if (type && type === 'graph') {
 		return (
-			<div className="w-full rounded-lg overflow-hidden shadow-lg bg-gray-800 mb-2">
+			<div className={className}>
 				<div className="px-2 py-2">
 					<Line data={graphData} height={250} />
 					<p className="text-center text-gray-500 text-base">{title}</p>
@@ -34,7 +35,7 @@ export const Card: React.FC<Data> = ({ stats, title, type, graphData }) => {
 
 	return (
 		<>
-			<div className="w-full rounded-lg overflow-hidden shadow-lg bg-gray-800 mb-2">
+			<div className={className}>
 				<div className="px-4 py-2 flex flex-row justify-around">
 					<div>
 						<div className="text-center font-bold text-4xl text-red-600">

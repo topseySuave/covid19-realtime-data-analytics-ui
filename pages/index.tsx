@@ -57,7 +57,7 @@ export interface countryPointsProps {
 }
 
 export interface HistoryProps {
-	[x: string]: { [s: string]: number; } | ArrayLike<{[s: string]: number;}>;
+	[x: string]: { [s: string]: number; } | ArrayLike<{ [s: string]: number; }>;
 }
 
 interface Props {
@@ -83,14 +83,14 @@ interface Props {
 export const isBrowser = process.browser && true;
 
 const Home: NextPage<Props> = (props) => {
-    const activeTheme = isBrowser && parseInt(localStorage.getItem('cov-theme'), 10)
+	const activeTheme: string = isBrowser && localStorage.getItem('cov-theme') || 'dark'
 
 	const [state, setState] = useState({
 		countryData: null,
-		theme: activeTheme === 1 ? 1 : 0
+		theme: activeTheme
 	})
 
-	const changeLeftPanelTheme = (theme: number) => {
+	const changeLeftPanelTheme = (theme: string) => {
 		setState({ ...state, theme })
 	}
 
@@ -110,24 +110,27 @@ const Home: NextPage<Props> = (props) => {
 		return history
 	}
 
-	return (
-		<div className="flex">
-			<div className="w-1/4">
-				<LeftPanel
-					panelData={state.countryData || { ...handleHistory(props.history), ...props.data }}
-					theme={state.theme}
-				/>
+	if (isBrowser) {
+		return (
+			<div className="flex">
+				<div className="w-1/4">
+					<LeftPanel
+						panelData={state.countryData || { ...handleHistory(props.history), ...props.data }}
+						theme={state.theme}
+					/>
+				</div>
+				<div className="flex-1 relative" style={{ width: '100vw', height: '100vh' }}>
+					<MapView
+						countriesData={props.countries}
+						getData={getData}
+						changeLeftPanelTheme={changeLeftPanelTheme}
+						activeTheme={state.theme}
+					/>
+				</div>
 			</div>
-			<div className="flex-1 relative" style={{ width: '100vw', height: '100vh' }}>
-				<MapView
-					countriesData={props.countries}
-					getData={getData}
-					changeLeftPanelTheme={changeLeftPanelTheme}
-					activeTheme={state.theme}
-				/>
-			</div>
-		</div>
-	);
+		);
+	}
+	return <div>Loading...</div>;
 }
 
 Home.getInitialProps = async () => {

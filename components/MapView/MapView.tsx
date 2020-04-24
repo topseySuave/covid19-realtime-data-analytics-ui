@@ -9,8 +9,8 @@ import { CountryProps, countryPointsProps } from '../../pages'
 interface Props {
     countriesData: Array<CountryProps>;
     getData: (properties: countryPointsProps) => void;
-    changeLeftPanelTheme?: (theme: number) => void;
-    activeTheme: number
+    changeLeftPanelTheme?: (theme: string) => void;
+    activeTheme: string
 }
 
 interface DataPointProps {
@@ -31,7 +31,7 @@ const MapView: React.FC<Props> = (props) => {
     const [state, setState] = useState({
         points: [],
         activeStyle: props.activeTheme,
-        mapStyle: props.activeTheme === 1 ? "mapbox://styles/mapbox/dark-v10" : "mapbox://styles/mapbox/light-v10"
+        mapStyle: props.activeTheme === 'dark' ? "mapbox://styles/mapbox/dark-v10" : "mapbox://styles/mapbox/light-v10"
     });
 
     const [viewport, setViewport] = useState({
@@ -99,7 +99,7 @@ const MapView: React.FC<Props> = (props) => {
     }
     ));
 
-    const changeMapTheme = (mapStyle: string, activeStyle: number) => {
+    const changeMapTheme = (mapStyle: string, activeStyle: string) => {
         changeLeftPanelTheme(activeStyle)
         setState({
             ...state,
@@ -107,8 +107,8 @@ const MapView: React.FC<Props> = (props) => {
             activeStyle
         })
 
-        if (localStorage.getItem('cov-theme') !== activeStyle.toString()) {
-            localStorage.setItem('cov-theme', activeStyle.toString())
+        if (localStorage.getItem('cov-theme') !== activeStyle) {
+            localStorage.setItem('cov-theme', activeStyle)
         }
     }
 
@@ -122,7 +122,7 @@ const MapView: React.FC<Props> = (props) => {
         })
     }
 
-    const addClass = (activeStyle: number) => {
+    const addClass = (activeStyle: string) => {
         return [`rounded-full h-fit-content py-1 px-5 ${state.activeStyle === activeStyle ? 'bg-gray-800' : 'bg-transparent'}`].join()
     }
 
@@ -130,11 +130,11 @@ const MapView: React.FC<Props> = (props) => {
         <>
             <div className='sidebarStyle w-3/4 flex justify-between'>
                 <div className="border border-gray-200 bg-gray-700 rounded-full h-fit-content ml-5">
-                    <button className={addClass(0)} onClick={() => changeMapTheme('mapbox://styles/mapbox/light-v10', 0)}><FontAwesomeIcon size="lg" icon={faSun} /></button>
-                    <button className={addClass(1)} onClick={() => changeMapTheme('mapbox://styles/mapbox/dark-v10', 1)}> <FontAwesomeIcon size="lg" icon={faMoon} /></button>
+                    <button className={addClass('light')} onClick={() => changeMapTheme('mapbox://styles/mapbox/light-v10', 'light')}><FontAwesomeIcon size="lg" icon={faSun} /></button>
+                    <button className={addClass('dark')} onClick={() => changeMapTheme('mapbox://styles/mapbox/dark-v10', 'dark')}> <FontAwesomeIcon size="lg" icon={faMoon} /></button>
                 </div>
                 <div className="">
-                    <p className={[`${state.activeStyle === 0 && 'text-black'}`].join()}>Sort By:</p>
+                    <p className={[`${state.activeStyle === 'light' && 'text-black'}`].join()}>Sort By:</p>
                     <button className="border border-green-600 text-white bg-gray-700 opacity-75 rounded-full py-1 px-5 mr-2" onClick={() => sortByCategory("Minor")}> Minor</button>
                     <button className="border border-yellow-500 text-white bg-gray-700 opacity-75 rounded-full py-1 px-5 mr-2" onClick={() => sortByCategory("Moderate")}>Moderate</button>
                     <button className="border border-orange-600 bg-gray-700 opacity-75 rounded-full py-1 px-5 mr-2" onClick={() => sortByCategory("Considerable")}> Considerable</button>

@@ -3,6 +3,7 @@ import Card from '../Card'
 import { useSpring, animated } from 'react-spring'
 import { formatNumber } from '../../utils/helpers'
 import { countryPointsProps } from '../../pages'
+
 const worldFlag = require('../assets/earth.png')
 
 interface PanelProps {

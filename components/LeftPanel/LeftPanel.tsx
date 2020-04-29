@@ -9,9 +9,10 @@ const worldFlag = require('../assets/earth.png')
 interface PanelProps {
 	panelData: countryPointsProps;
 	theme: string;
+	mobileView: boolean;
 }
 
-export default function LeftPanel({ panelData, theme }: PanelProps) {
+export default function LeftPanel({ panelData, theme, mobileView }: PanelProps) {
 
 	const getProjectedData = (panelData: countryPointsProps) => {
 		if (panelData.oneWeekProjection) {

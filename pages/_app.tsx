@@ -1,9 +1,14 @@
 // import App from 'next/app'
 import './output.css'
 import Home from './'
+import ErrorBoundary from '../components/ErrorBoundary'
 
 function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />
+  return (
+    <ErrorBoundary>
+      <Component {...pageProps} />
+    </ErrorBoundary>
+  )
 }
 
 // Only uncomment this method if you have blocking data requirements for

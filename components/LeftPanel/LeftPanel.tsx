@@ -50,7 +50,7 @@ export default function LeftPanel({ panelData, theme, mobileView }: PanelProps) 
 				data: panelData.fortnightCases
 			},
 			{
-				label: 'Next 14 days Projection',
+				label: 'Next 14 days',
 				fill: true,
 				lineTension: 0.5,
 				backgroundColor: '#026F92',

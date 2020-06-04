@@ -3,6 +3,7 @@ import { NextPage } from 'next';
 import fetch from 'isomorphic-unfetch';
 import dynamic from 'next/dynamic'
 import LeftPanel from '../components/LeftPanel'
+import MobileView from '../components/MobileView'
 import { arraySubtraction } from '../utils/helpers'
 
 const MapView = dynamic(() => import('../components/MapView'), { ssr: false })
@@ -81,6 +82,7 @@ interface Props {
 }
 
 export const isBrowser = process.browser && true;
+const mobileSize = 920
 
 const Home: NextPage<Props> = (props) => {
 	const activeTheme: string = isBrowser && localStorage.getItem('cov-theme') || 'dark'
@@ -103,7 +105,7 @@ const Home: NextPage<Props> = (props) => {
 		if (!isClient) return;
 		
 		setWidth(getWidth());
-		if (window.innerWidth < 1570){
+		if (window.innerWidth < mobileSize){
 			setState({...state, mobileView: true})
 		}
 
@@ -115,7 +117,7 @@ const Home: NextPage<Props> = (props) => {
 
 	const handleResize = () => {
 		setWidth(getWidth());
-		if (window.innerWidth < 1570){
+		if (window.innerWidth < mobileSize){
 			setState({...state, mobileView: true})
 		} else {
 			setState({...state, mobileView: false})
@@ -144,23 +146,33 @@ const Home: NextPage<Props> = (props) => {
 
 	if (isBrowser) {
 		return (
-			<div className="flex">
-					<div className="w-1/4">
-						<LeftPanel
-							panelData={state.countryData || { ...handleHistory(props.history), ...props.data }}
-							theme={state.theme}
-							mobileView={state.mobileView}
-						/>
-					</div>
-				<div className="flex-1 relative" style={{ width: '100vw', height: '100vh' }}>
-					<MapView
-						countriesData={props.countries}
-						getData={getData}
-						changeLeftPanelTheme={changeLeftPanelTheme}
-						activeTheme={state.theme}
-					/>
-				</div>
-			</div>
+      <>
+			{
+				!state.mobileView ?
+			
+          <div className="flex">
+            <div className="w-1/4">
+              <LeftPanel
+                panelData={state.countryData || { ...handleHistory(props.history), ...props.data }}
+                theme={state.theme}
+                mobileView={state.mobileView}
+              />
+            </div>
+            <div className="flex-1 relative" style={{ width: '100vw', height: '100vh' }}>
+              <MapView
+                countriesData={props.countries}
+                getData={getData}
+                changeLeftPanelTheme={changeLeftPanelTheme}
+                activeTheme={state.theme}
+              />
+            </div>
+          </div>
+        :
+        <MobileView
+          theme={state.theme}
+        />			
+			}
+      </>
 		);
 	}
 	return <div>Loading...</div>;

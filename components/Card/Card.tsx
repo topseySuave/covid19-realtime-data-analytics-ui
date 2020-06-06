@@ -38,7 +38,7 @@ export const Card: React.FC<Data> = ({ stats, title, type, graphData, className 
 			<div className={className}>
 				<div className="px-4 py-2 flex flex-row justify-around">
 					<div>
-						<div className="text-center font-bold text-4xl text-red-600">
+						<div className="text-center font-bold text-red-600 sm:text-xs md:text-base lg:text-xl xl:text-2xl">
 							{stats[0].infoNumber}
 						</div>
 						<p className="text-center text-gray-500 text-sm">{stats[0].infoTitle}</p>
@@ -46,7 +46,8 @@ export const Card: React.FC<Data> = ({ stats, title, type, graphData, className 
 					{
 						stats[1] &&
 						<div className="ml-10">
-							<div className="text-center font-bold text-4xl text-red-600">{stats[1].infoNumber}</div>
+							<div className="text-center font-bold text-red-600 sm:text-xs md:text-base lg:text-xl xl:text-2xl">
+                {stats[1].infoNumber}</div>
 							<p className="text-center text-gray-500 text-sm">{stats[1].infoTitle}</p>
 						</div>
 					}

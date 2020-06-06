@@ -9,9 +9,10 @@ const worldFlag = require('../assets/earth.png')
 interface PanelProps {
 	panelData: countryPointsProps;
 	theme: string;
+	mobileView: boolean;
 }
 
-export default function LeftPanel({ panelData, theme }: PanelProps) {
+export default function LeftPanel({ panelData, theme, mobileView }: PanelProps) {
 
 	const getProjectedData = (panelData: countryPointsProps) => {
 		if (panelData.oneWeekProjection) {
@@ -49,7 +50,7 @@ export default function LeftPanel({ panelData, theme }: PanelProps) {
 				data: panelData.fortnightCases
 			},
 			{
-				label: 'Next 14 days Projection',
+				label: 'Next 14 days',
 				fill: true,
 				lineTension: 0.5,
 				backgroundColor: '#026F92',
